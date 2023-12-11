@@ -9,13 +9,25 @@
 	<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap" rel="stylesheet">
 	<meta name="description" content="">
 	<link rel="stylesheet" href="./assets/style.css">
+	<script src="https://kit.fontawesome.com/4ef213e00b.js" crossorigin="anonymous"></script>
 	<script src="scripts/main.js"></script>
 </head>
 <body>
 	<div class="editor-banner" id="editor-mode" style="display: none;">
 		<p class="editor-banner-content "><i class="fa-regular fa-pen-to-square fa-lg"></i>Mode édition</p>
-		<button class="editor-button">publier les changements</button>
 	</div>
+	<aside id="modal1" class="js-modal" aria-hidden="true" aria-modal="false" role="dialog" aria-labelledby="titlemodal1" style="display: none">
+		<div class="modal-wrapper modal-wrapper-gallery js-modal-stop">
+			<p class="js-modal-close"><i class="fa-solid fa-xmark"></i></p>
+			<h3 id="titlemodal1">Galerie photo</h3>
+			<div class="modal-gallery"></div>
+			<hr>
+			<div class="gallery-modif-submit">
+				<button class="modal-gallery-btn">Ajouter une photo<input type="file" style="display: none;"></button>
+				<p><a href="#" class="delete-gallery">Supprimer la galerie </a></p>
+			</div>
+		</div>
+	</aside>
 <header>
 	<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
 	<nav>
@@ -43,8 +55,8 @@
 	<section id="portfolio">
 		<div class="portfolio-title">
 			<h2>Mes Projets</h2>
-			<a class="editor-content modal-link" id="editor-element">
-			<i class="fa-regular fa-pen-to-square fa-lg"></i>modifier</a>
+			<span class="editor-content modal1" id="open-modal1">
+			<i class="fa-solid fa-pen-to-square"></i>modifier</span>
 		</div>
 		<div id="filters-container">
 		</div>
