@@ -88,10 +88,44 @@ function filters (button) {
         });
     })
 }
-    
 
-window.addEventListener("load",  ()=>{affichageEditeur()})
-async function affichageEditeur() {
+let modal = null
+
+function openModal() {
+    const target = document.querySelector(".js-modal")
+    target.style.display = null
+    target.removeAttribute("aria-hidden")
+    target.setAttribute("aria-modal", "true")
+    modal = target
+    const jsModalClose = document.querySelector(".js-modal-close");
+    if (jsModalClose) {
+        jsModalClose.addEventListener("click", closeModal)
+    }
+}
+
+const closeModal = function (e) {
+    if (modal === null) return
+    modal.style.display = "none"
+    modal.setAttribute("aria-hidden", "true")
+    modal.removeAttribute("aria-modal")
+    modal.removeEventListener("click", closeModal)
+    modal.querySelector(".js-modal-close").removeEventListener("click", closeModal)
+    modal = null
+    stopPropagation(e);
+}
+
+const stopPropagation = function (e) {
+    e.stopPropagation()
+}
+
+window.addEventListener("keydown", function (e){
+    if (e.key === "Escape"  || e.key === "Esc") {
+        closeModal(e)
+    }
+})
+
+window.addEventListener("load",  ()=>{onLoad()})
+async function onLoad() {
     const logoutLink = document.querySelector("#logout-link");
     const loginLink = document.querySelector("#login-link");
     const token = localStorage.getItem("token");
@@ -122,4 +156,13 @@ async function affichageEditeur() {
             window.location.reload();
         });
     }
+
+    const modal1 = document.getElementById("open-modal1");
+    if (modal1) {
+        modal1.addEventListener("click", ()=>{openModal()});
+    }
+
+    document.querySelectorAll(".js-modal").forEach(a => {
+        a.addEventListener("click", openModal)
+    })
 }
