@@ -347,6 +347,10 @@ footer nav ul {
 	row-gap: 10px;
 }
 
+.modal-gallery .modal-img {
+	position: relative;
+}
+
 .gallery-modif-submit {
 	display: grid;
 	place-items: center;
@@ -371,3 +375,4 @@ footer nav ul {
 	color: #d65353;
 	text-decoration: none;
 }
+

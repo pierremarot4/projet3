@@ -20,6 +20,8 @@ fetch("http://localhost:5678/api/works", {
         projetElement.appendChild(projetTitle);
         divGallery.appendChild(projetElement);
     });
+});
+
     fetch("http://localhost:5678/api/categories", {
         method: 'GET',
         headers: {
@@ -36,7 +38,6 @@ fetch("http://localhost:5678/api/works", {
             createFilterButton(btn);
         })
     })
-})
 
 
 function createFilterButton (btn) {
@@ -101,6 +102,8 @@ function openModal() {
     if (jsModalClose) {
         jsModalClose.addEventListener("click", closeModal)
     }
+    displayModalGallery();
+
 }
 
 const closeModal = function (e) {
@@ -111,6 +114,8 @@ const closeModal = function (e) {
     modal.removeEventListener("click", closeModal)
     modal.querySelector(".js-modal-close").removeEventListener("click", closeModal)
     modal = null
+    const modalGallery = document.querySelector(".modal-gallery");
+    modalGallery.innerHTML = ""
     stopPropagation(e);
 }
 
@@ -123,6 +128,27 @@ window.addEventListener("keydown", function (e){
         closeModal(e)
     }
 })
+
+function displayModalGallery() {
+    const modalGallery = document.querySelector(".modal-gallery");
+    fetch("http://localhost:5678/api/works", {
+        method: 'GET',
+        headers: {
+        Accept: 'application/json',
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        const divGallery = document.querySelector(".modal-gallery");
+        data.forEach((projet) => {
+        const modalGallery = document.querySelector(".modal-gallery");
+        const modalProjetElement = document.createElement("img");
+        modalProjetElement.className = "modal-img";
+        modalProjetElement.src = projet.imageUrl;
+        modalGallery.appendChild(modalProjetElement);
+        });
+    })
+}
 
 window.addEventListener("load",  ()=>{onLoad()})
 async function onLoad() {
@@ -165,4 +191,5 @@ async function onLoad() {
     document.querySelectorAll(".js-modal").forEach(a => {
         a.addEventListener("click", openModal)
     })
+
 }
