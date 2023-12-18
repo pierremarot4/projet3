@@ -13,6 +13,7 @@
 	<script src="scripts/main.js"></script>
 </head>
 <body>
+	<div id="body-container">
 	<div class="editor-banner" id="editor-mode" style="display: none;">
 		<p class="editor-banner-content "><i class="fa-regular fa-pen-to-square fa-lg"></i>Mode édition</p>
 	</div>
@@ -25,6 +26,30 @@
 			<div class="gallery-modif-submit">
 				<button class="modal-gallery-btn">Ajouter une photo<input type="file" style="display: none;"></button>
 				<p><a href="#" class="delete-gallery">Supprimer la galerie </a></p>
+			</div>
+		</div>
+		<div class="modal-wrapper modal-add-photo" style="display: none;">
+			<i class="fa-solid fa-arrow-left" id="previous-arrow"></i>
+			<p class="js-modal-close"><i class="fa-solid fa-xmark"></i></p>
+			<h3>Ajout photo</h3>
+			<div class="add-image">
+				<div class="add-project-image" style="display: none;"></div>
+				<i class="fa-regular fa-image"></i>
+				<button class="add-image-btn ">+ Ajouter photo</button>
+				<p class="add-image-format">jpg, png : 4mo max</p>
+			</div>
+			<div class="form-container">
+				<form id="upload-form" enctype="multipart/form-data">
+					<label for="title">Titre</label>
+					<input type="text" name="title" id="title">
+					<label for="category">Catégorie</label>
+					<select id="category" name="category">
+					</select>
+				</form>
+			</div>
+			<hr>
+			<div class="gallery-modif-submit">
+				<button class="modal-btn modal-add-btn">Valider</button>
 			</div>
 		</div>
 	</aside>
@@ -85,5 +110,6 @@
 		</ul>
 	</nav>
 </footer>
+</div>
 </body>
 </html>
