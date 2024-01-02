@@ -1,3 +1,5 @@
+// Créer et afficher la galerie de projets, récupérer les projets dans l'API
+function loadGallery() {
 fetch("http://localhost:5678/api/works", {
     method: 'GET',
     headers: {
@@ -7,6 +9,7 @@ fetch("http://localhost:5678/api/works", {
     .then(response => response.json())
     .then(data => {
         const divGallery = document.querySelector(".gallery");
+        divGallery.innerHTML = "";
 
         data.forEach((projet) => {
             const projetElement = document.createElement("figure");
@@ -21,7 +24,11 @@ fetch("http://localhost:5678/api/works", {
             divGallery.appendChild(projetElement);
         });
     });
+}
 
+loadGallery();
+
+//Récupérer les catégories dans l'API
 fetch("http://localhost:5678/api/categories", {
     method: 'GET',
     headers: {
@@ -39,7 +46,7 @@ fetch("http://localhost:5678/api/categories", {
         })
     })
 
-
+// Créer les boutons de filtres
 function createFilterButton(btn) {
     const filtersContainer = document.getElementById("filters-container");
 
@@ -90,8 +97,10 @@ function filters(button) {
         })
 }
 
+// PARTIE MODALE
 let modal = null
 
+// Ouvrir la fenêtre modale
 function openModal(e) {
     const target = document.querySelector(".js-modal")
     target.style.display = null
@@ -112,15 +121,19 @@ function openModal(e) {
     stopPropagation(e);
 }
 
+// Afficher le formulaire d'envoie de nouveau projet
 function displayEditForm(e) {
     e.preventDefault();
     const modalWrapperGallery = document.querySelector(".modal-wrapper-gallery");
     const modalAddPhoto = document.querySelector(".modal-add-photo");
+    const addImageButton = document.querySelector(".add-image-btn");
+    addImageButton.addEventListener("click", importImage);
     modalWrapperGallery.style.display = "none";
     modalAddPhoto.style.display = "block";
     const previousArrow = document.getElementById("previous-arrow");
     previousArrow.addEventListener("click", (e) => {
         e.preventDefault();
+        displayModalGallery();
         modalAddPhoto.style.display = "none";
         modalWrapperGallery.style.display = "";
     })
@@ -133,6 +146,7 @@ function displayEditForm(e) {
         .then(response => response.json())
         .then(data => {
             const selectElement = document.getElementById("category");
+            selectElement.innerHTML = "";
             data.forEach((category) => {
                 const optionElement = document.createElement("option");
                 optionElement.value = category.id;
@@ -142,6 +156,36 @@ function displayEditForm(e) {
         })
 }
 
+function importImage() {
+    const imageFile = document.getElementById("image-file");
+    imageFile.click();
+}
+
+// Envoyer un nouveau projet via le formulaire
+function sendNewWork() {
+    const token = localStorage.getItem("token");
+    const form = document.getElementById("upload-form");
+    const formData = new FormData(form);
+    fetch("http://localhost:5678/api/works/", {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + token
+        },
+        body: formData,
+    })
+        .then(response => {
+            console.log(response)
+            alert ("La photo est bien ajoutée");
+            loadGallery();
+        })
+        .catch((erreur) => {
+            alert ("Une erreur est survenue");
+        })
+}
+
+
+// Fermer la fenêtre modale
 const closeModal = function (e) {
     if (modal === null) return
 
@@ -170,8 +214,10 @@ window.addEventListener("keydown", function (e) {
     }
 })
 
+
+// Récupérer les travaux dans l'API et les afficher dans la fenêtre modale
 function displayModalGallery() {
-    const modalGallery = document.querySelector(".modal-gallery");
+    
     fetch("http://localhost:5678/api/works", {
         method: 'GET',
         headers: {
@@ -180,8 +226,9 @@ function displayModalGallery() {
     })
         .then(response => response.json())
         .then(data => {
+            const modalGallery = document.querySelector(".modal-gallery");
+            modalGallery.innerHTML="";
             data.forEach((projet) => {
-                const modalGallery = document.querySelector(".modal-gallery");
                 const container = document.createElement("div");
                 container.classList.add("modal-gallery-container");
                 const modalProjetElement = document.createElement("img");
@@ -198,6 +245,7 @@ function displayModalGallery() {
         })
 }
 
+// Supprimer un projet
 function deleteProjet(id) {
     const token = localStorage.getItem("token");
 
@@ -206,7 +254,7 @@ function deleteProjet(id) {
         headers: {
             Accept: 'application/json',
             Authorization: 'Bearer ' + token
-        }
+        },
     })
         .then(response => {
             if (response.ok) {
@@ -217,6 +265,8 @@ function deleteProjet(id) {
         }).catch(err => console.error(err));
 }
 
+
+// Eléments au chargement de la page
 window.addEventListener("load", () => { onLoad() })
 async function onLoad() {
     const logoutLink = document.querySelector("#logout-link");
@@ -254,4 +304,19 @@ async function onLoad() {
     if (modal1) {
         modal1.addEventListener("click", (e) => { openModal(e) });
     }
+
+    const modalAddButton = document.getElementById("modal-add-btn");
+    modalAddButton.addEventListener("click", sendNewWork);
+
+    const imageFile = document.getElementById("image-file"); 
+    imageFile.addEventListener("change", (e) => { 
+        const output = document.getElementById("image-preview");
+        output.style.display = "block";
+        const imageIcon = document.getElementById("image-icon");
+        imageIcon.style.display = "none";
+        const addImageButton = document.querySelector(".add-image-btn");
+        addImageButton.style.display = "none";
+        output.src = URL.createObjectURL(e.target.files[0]);
+    })
+
 }

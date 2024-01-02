@@ -1,6 +1,5 @@
 window.addEventListener("load",  ()=>{
 
-    //const loginForm = document.querySelector(".loginForm")
     const loginForm = document.forms[0]
     const error = document.querySelector("#error-message")
 
