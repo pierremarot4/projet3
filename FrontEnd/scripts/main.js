@@ -300,6 +300,11 @@ async function onLoad() {
         });
     }
 
+    if (!token) {
+        const modal1 = document.getElementById("open-modal1");
+        modal1.style.display = "none";
+    }
+
     const modal1 = document.getElementById("open-modal1");
     if (modal1) {
         modal1.addEventListener("click", (e) => { openModal(e) });
